@@ -1,4 +1,6 @@
-#include "stdlib.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #ifndef UI_HEADER
 #define UI_HEADER
@@ -7,7 +9,8 @@
 #include <stdio.h>
 #include <sys/ioctl.h>
 #define clrscr() system("clear")
-#define utf8() {}
+#define utf8() \
+    {}
 
 #define C_B_BLACK 40
 #define C_B_RED 41
@@ -46,6 +49,7 @@
 #define C_F_BWHITE 97
 
 #elif defined _WIN32
+#include <conio.h>
 #include <windows.h>
 #define clrscr() system("cls")
 #define utf8() SetConsoleOutputCP(CP_UTF8)
@@ -88,7 +92,8 @@
 
 #else
 
-#define utf8() {}
+#define utf8() \
+    {}
 #define C_B_BLACK 0
 #define C_B_RED 4
 #define C_B_GREEN 2
@@ -127,13 +132,23 @@
 
 #endif
 
+#define KEY_UP 1
+#define KEY_LEFT 2
+#define KEY_DOWN 3
+#define KEY_RIGHT 4
+#define KEY_ENTER 5
+
 void setColor(short f, short b);
 void setCursorPos(int x, int y);
+int waitForArrowOrEnter();
 
 typedef struct {
     int width, height;
 } WINSIZE;
 
 WINSIZE getWinSize();
-void printDialog(char* texts[], int x, int y, int width, int leftOffset, int fC, int bC, int lastInput, int firstMenu);
+void printDialog(char* texts[], int len, int x, int y, int width, int fC, int bC, int lastInput, int firstMenu);
+int launchMenu(char* texts[], int len, int x, int y, int width, int fC, int bC, int firstMenu, char selector, int textStartIndex);
+int launchDialog(char* texts[], int len, int x, int y, int width, int fC, int bC, int firstMenu, int selectionfC, int selectionbC, int dialogStartIndex);
+int calculateMinWidth(char* texts[], int len);
 #endif
